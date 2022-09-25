@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
         ifstream test; 
         string fileToOpen = argv[1];
         fileToOpen +=  ".cs4280";
-        test.open(fileToOpen);
+        test.open(fileToOpen.c_str());
         if (test.is_open()){
             while(!test.eof()){
                 test >> text;
