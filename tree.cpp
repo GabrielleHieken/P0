@@ -24,7 +24,16 @@ Node* BinarySearchTree::insert(Node** currentNode, string name){
         insert(&(*currentNode)->leftChild, name);
     }
     else if(name.length() == (*currentNode)->nameLength){
-        string* newArray = new string[(*currentNode)->size + 1];
+        //check if the word we are entering already exists
+        for (int i = 0; i < (*currentNode)->size; i++){
+            if (name == (*currentNode)->data[i]){
+                //The same word we are about to enter is already in here
+                return *currentNode;
+            }
+        }
+
+        //Make an array with the new word in it
+        string *newArray = new string[(*currentNode)->size + 1];
         for(int i = 0; i < (*currentNode)->size; i++){
             newArray[i] = (*currentNode)->data[i];
         }

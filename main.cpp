@@ -4,10 +4,11 @@
 
 using namespace std; 
 
-int spaceFunction(string);
-void treeAddition(int, string, string);
 void printTree(BinarySearchTree, string);
+Node* addLineToTree(BinarySearchTree, string);
 
+
+//Could move the tree print to once at the end 
 int main(int argc, char *argv[]){
     int spacecount;
     string text; 
@@ -15,13 +16,13 @@ int main(int argc, char *argv[]){
 
     // for taking input "./file < filename.extension"
     if(argc == 1){
-        
-        // cout << argv[1] << argv[3];
         string text;
-        getline(cin, text);
+        while (getline(cin, text)){
+            //cout << text << endl;
+            BST.root = addLineToTree(BST, text);
+        }
 
-        spacecount = spaceFunction(text);
-        treeAddition(spacecount, text, "outP0");
+        printTree(BST, "outP0");
     }
 
     //taking input "./file fileName" and appending .cs4280 extension
@@ -29,16 +30,24 @@ int main(int argc, char *argv[]){
         ifstream test; 
         string fileToOpen = argv[1];
         fileToOpen +=  ".cs4280";
-        cout << fileToOpen;
         test.open(fileToOpen);
+        if (test.is_open()){
+            while(!test.eof()){
+                test >> text;
+                BST.insert(&(BST.root), text);
+            }
 
-        while(getline(test, text)){
-            cout << text << endl;
+            test.close();
+            // use fileName for output
+            if (fileToOpen.find(".cs4280"))
+            {
+                fileToOpen = fileToOpen.substr(0, fileToOpen.find(".cs4280"));
+            }
+            printTree(BST, fileToOpen);
+        }else {
+            cout << "Error opening file/file not found in directory. Ending program" << endl;
+            return 0;
         }
-
-        spacecount = spaceFunction(text);
-        treeAddition(spacecount, text, fileToOpen);
-        test.close();
 
     //for user input names directly from command line "./program name name name ..."
     }else {
@@ -48,6 +57,7 @@ int main(int argc, char *argv[]){
         printTree(BST, "outP0");
     }
 
+    
     return 0;
 }
 
@@ -64,38 +74,45 @@ void printTree(BinarySearchTree BST, string fileName){
     BST.printPreorder(BST.root, 0, fileName);
 }
 
-//Find number of spaces in document to know how many times to add a name to tree
-int spaceFunction(string text){
-    int space = 0;
-    int spacecount = 0;
-
-    //Find number of spaces in document
-    while(text.find(" ", space+1) != -1){
-        space = text.find(" ", space+1);
-        spacecount++;
+// Text is either one word (the words are serpated by enters in this case), a bunch of words with tabs inbetween, or a bunch of words with spaces inbetween
+Node* addLineToTree(BinarySearchTree BST, string text)
+{
+    if (text.empty())
+    {
+        cout << "Text is emopty, red alert" << endl;
+        return BST.root;
     }
 
-    return spacecount;
+    string singleWord;
+    // Pulls out words from a string with spaces
+    if (!(text.find(" ") == -1))
+    {
+        while (!(text.find(" ") == -1))
+        {
+            singleWord = text.substr(0, text.find(" "));
+            text = text.substr(text.find(" ") + 1, text.length());
+
+            // put 'individual' name in tree
+            BST.insert(&(BST.root), singleWord);
+        }
+    }
+
+    //Pulls out words from a string with tabs
+    if (!(text.find("\t") == -1))
+    {
+
+        while (!(text.find("\t") == -1))
+        {
+            singleWord = text.substr(0, text.find("\t"));
+            text = text.substr(text.find("\t") + 1, text.length());
+
+            // put 'individual' name in tree
+            BST.insert(&(BST.root), singleWord);
+        }
+    }
+
+    //Insert the last word with all tabs or spaces removed
+    BST.insert(&(BST.root), text);  
+
+    return BST.root;
 }
-
-//chops one name from the input string and adds it to the tree
-void treeAddition(int spacecount, string text, string fileName){
-    string individual;
-    BinarySearchTree BST;
-
-    for(int i = 0; i < spacecount; i++){
-        individual = text.substr(0,text.find(" "));
-        text = text.substr(text.find(" ")+1, text.length());
-    
-        //put 'individual' name in tree
-        BST.insert(&(BST.root), individual);
-    }
-    BST.insert(&(BST.root), text);
-
-    //use fileName for output 
-    if(fileName.find(".cs4280")){
-        fileName = fileName.substr(0, fileName.find(".cs4280"));
-    }
-
-   printTree(BST, fileName);
-}  
