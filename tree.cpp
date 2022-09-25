@@ -50,9 +50,10 @@ Node* BinarySearchTree::insert(Node** currentNode, string name){
 }
 
 //writes and formats the input for each traversal
-void printToFileCurrentNode(int depth, int length, int size, string* data, string fileName, string fileExtension){
-    ofstream ofile(fileName+fileExtension, ios::app);
-    //ofile.open(fileName+fileExtension);
+void printToFileCurrentNode(int depth, int length, int size, string* data, string fileName, string fileExtension){ 
+    //ofile.open(fileName+fileExtension, ios::app);
+    fileName +=  fileExtension;
+    ofstream ofile(fileName, ios::app);
 
     //find the depth of the node in the tree for formatting and insert it to file
     for(int i = 0; i<depth; i++){
