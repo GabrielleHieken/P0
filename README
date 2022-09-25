@@ -1,0 +1,14 @@
+There is a Makefile in this directory, so to run the program type 'make'
+
+You could then test the program using one of the following commands
+
+1) ./P0 hello you can add as many names as you want here
+        - creates outP0.inorder, postorder, preorder
+
+2) ./P0 anyFileName
+        - creates anyFileName.cs4280
+        - creates anyFileName.inorder, postorder, preorder
+
+3) ./P0 < anyFileinDirectory
+        - you can use the test file already created in the directory (inputsRedirect.txt) or any file you'd like to add
+        - creates outP0.inorder, postorder, preorder
