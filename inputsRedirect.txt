@@ -1,1 +1,1 @@
-apples bananas
+This is reading from the inputsredirect text
